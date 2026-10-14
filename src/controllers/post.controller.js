@@ -1,7 +1,7 @@
-import * as service from '../services/post.service.js';
+import * as postService from '../services/post.service.js';
 
 export const createPost = async (req, res) => {
-  const post = await service.createPost({
+  const post = await postService.createPost({
     ...req.body,
     author: req.params.user,
   });
@@ -14,7 +14,7 @@ export const createPost = async (req, res) => {
 };
 
 export const getPostByID = async (req, res) => {
-  const post = await service.getPostByID(req.params.id);
+  const post = await postService.getPostByID(req.params.id);
 
   if (post) {
     return res.json(post);
@@ -24,7 +24,7 @@ export const getPostByID = async (req, res) => {
 };
 
 export const addLike = async (req, res) => {
-  const success = await service.addLike(req.params.id);
+  const success = await postService.addLike(req.params.id);
 
   if (success) {
     return res.status(204).send();
@@ -34,17 +34,20 @@ export const addLike = async (req, res) => {
 };
 
 export const findPostByTags = async (req, res) => {
-  const posts = await service.findPostByTags(req.query.values);
-  return res.json(posts);
+ let values = req.query.values;
+ if (Array.isArray(req.query.values)) {
+   values = req.query.values.join(',');
+ }
+ return res.json(await postService.findPostByTags(values));
 };
 
 export const findPostByAuthor = async (req, res) => {
-  const posts = await service.findPostByAuthor(req.params.author);
+  const posts = await postService.findPostByAuthor(req.params.author);
   return res.json(posts);
 };
 
 export const addComment = async (req, res) => {
-  const post = await service.addComment(
+  const post = await postService.addComment(
     req.params.id,
     req.params.commenter,
     req.body.message
@@ -58,7 +61,7 @@ export const addComment = async (req, res) => {
 };
 
 export const updatePost = async (req, res) => {
-  const post = await service.updatePost(req.params.id, req.body);
+  const post = await postService.updatePost(req.params.id, req.body);
 
   if (post) {
     return res.json(post);
@@ -68,7 +71,7 @@ export const updatePost = async (req, res) => {
 };
 
 export const findPostByPeriod = async (req, res) => {
-  const posts = await service.findPostByPeriod(
+  const posts = await postService.findPostByPeriod(
     req.query.dateFrom,
     req.query.dateTo
   );
@@ -77,7 +80,7 @@ export const findPostByPeriod = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-  const post = await service.deletePost(req.params.id);
+  const post = await postService.deletePost(req.params.id);
 
   if (post) {
     return res.json(post);

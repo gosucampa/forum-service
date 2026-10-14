@@ -13,14 +13,14 @@ import {
 
 const router = Router();
 
-router.post('/forum/post/:user', createPost);
-router.get('/forum/post/:id', getPostByID);
-router.patch('/forum/post/:id/like', addLike);
-router.get('/forum/posts/author/:author', findPostByAuthor);
-router.patch('/forum/post/:id/comment/:commenter', addComment);
-router.delete('/forum/post/:id', deletePost);
-router.get('/forum/posts/tags', findPostByTags);
-router.get('/forum/posts/period', findPostByPeriod);
-router.patch('/forum/post/:id', updatePost);
+router.post('/post/:user', createPost);
+router.get('/post/:id', getPostByID);
+router.patch('/post/:id/like', addLike);
+router.get('/posts/author/:author', findPostByAuthor);
+router.patch('/post/:id/comment/:commenter', addComment);
+router.delete('/post/:id', deletePost);
+router.get('/posts/tags', findPostByTags);
+router.get('/posts/period', findPostByPeriod);
+router.patch('/post/:id', updatePost);
 
 export default router;
