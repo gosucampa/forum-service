@@ -1,96 +1,68 @@
 import * as postService from '../services/post.service.js';
 
 export const createPost = async (req, res) => {
-  const post = await postService.createPost({
-    ...req.body,
-    author: req.params.user,
-  });
+  const post = await postService.createPost(req.params.author, req.body);
+  return res.status(201).json(post);
+}
 
-  if (post) {
-    return res.status(201).json(post);
-  } else {
-    return res.status(409).send();
-  }
-};
-
-export const getPostByID = async (req, res) => {
-  const post = await postService.getPostByID(req.params.id);
-
-  if (post) {
+export const getPostById = async (req, res, next) => {
+  try {
+    const post = await postService.getPostById(req.params.id);
     return res.json(post);
-  } else {
-    return res.status(404).send();
+  } catch (e) {
+    return next(e);
   }
-};
+}
 
-export const addLike = async (req, res) => {
-  const success = await postService.addLike(req.params.id);
-
-  if (success) {
-    return res.status(204).send();
-  } else {
-    return res.status(404).send();
-  }
-};
-
-export const findPostByTags = async (req, res) => {
- let values = req.query.values;
- if (Array.isArray(req.query.values)) {
-   values = req.query.values.join(',');
- }
- return res.json(await postService.findPostByTags(values));
-};
-
-export const findPostByAuthor = async (req, res) => {
-  const posts = await postService.findPostByAuthor(req.params.author);
-  return res.json(posts);
-};
-
-export const addComment = async (req, res) => {
-  const post = await postService.addComment(
-    req.params.id,
-    req.params.commenter,
-    req.body.message
-  );
-
-  if (post) {
+export const deletePost = async (req, res, next) => {
+  try {
+    const post = await postService.deletePost(req.params.id);
     return res.json(post);
-  } else {
-    return res.status(404).send();
+  } catch (e) {
+    return next(e);
   }
-};
+}
 
-export const updatePost = async (req, res) => {
-  const post = await postService.updatePost(req.params.id, req.body);
+export const addLike = async (req, res, next) => {
+  try {
+    await postService.addLike(req.params.id);
+    return res.sendStatus(204)
+  } catch (e) {
+    return next(e);
+  }
+}
 
-  if (post) {
+export const getPostsByAuthor = async (req, res) => {
+  return res.json(await postService.getPostsByAuthor(req.params.author));
+}
+
+export const addComment = async (req, res, next) => {
+  try {
+    const post = await postService.addComment(req.params.id, req.params.commenter, req.body.message);
     return res.json(post);
-  } else {
-    return res.status(404).send();
+  } catch (e) {
+    return next(e);
   }
-};
+}
 
-export const findPostByPeriod = async (req, res) => {
-  const posts = await postService.findPostByPeriod(
-    req.query.dateFrom,
-    req.query.dateTo
-  );
+export const getPostsByTags = async (req, res) => {
+  let values = req.query.values;
+  if (Array.isArray(req.query.values)) {
+    values = req.query.values.join(',');
+  }
+  return res.json(await postService.getPostsByTags(values));
+}
 
-  return res.json(posts);
-};
+export const getPostsByPeriod = async (req, res) => {
+  const {dateFrom, dateTo} = req.query;
+  return res.json(await postService.getPostsByPeriod(dateFrom, dateTo));
+}
 
-export const deletePost = async (req, res) => {
-  const post = await postService.deletePost(req.params.id);
-
-  if (post) {
+export const updatePost = async (req, res, next) => {
+  try {
+    const post = await postService.updatePost(req.params.id, req.body);
     return res.json(post);
-  } else {
-    return res.status(404).send({
-      timestamp: new Date().toISOString(),
-      status: 404,
-      error: 'Not Found',
-      message: `Post with id = ${req.params.id} not found`,
-      path: req.path,
-    });
+  } catch (e) {
+    return next(e);
   }
-};
+}

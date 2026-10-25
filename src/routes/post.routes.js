@@ -1,26 +1,27 @@
 import { Router } from 'express';
 import {
   createPost,
-  getPostByID,
+  getPostById,
   addLike,
-  findPostByTags,
-  findPostByAuthor,
+  getPostsByTags,
+  getPostsByAuthor,
   addComment,
   updatePost,
-  findPostByPeriod,
+  getPostsByPeriod,
   deletePost,
 } from '../controllers/post.controller.js';
+import validate from '../middlewares/validation.middleware.js'
 
 const router = Router();
 
 router.post('/post/:user', createPost);
-router.get('/post/:id', getPostByID);
+router.get('/post/:id', getPostById);
 router.patch('/post/:id/like', addLike);
-router.get('/posts/author/:author', findPostByAuthor);
+router.get('/posts/author/:author', getPostsByAuthor);
 router.patch('/post/:id/comment/:commenter', addComment);
 router.delete('/post/:id', deletePost);
-router.get('/posts/tags', findPostByTags);
-router.get('/posts/period', findPostByPeriod);
+router.get('/posts/tags', getPostsByTags);
+router.get('/posts/period', getPostsByPeriod);
 router.patch('/post/:id', updatePost);
 
 export default router;
