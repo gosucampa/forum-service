@@ -1,4 +1,5 @@
 import * as userAccountRepository from "../repository/userAccount.repository.js";
+import bcrypt from "bcrypt";
 
 export const register = async (user) => {
   try {
@@ -34,7 +35,11 @@ export const changeRoles = async (login, role, isAddRole) => {
 }
 
 export const changePassword = async (login, newPassword) => {
-  // TODO: Implement user password change logic
+  const userAccount = await userAccountRepository.changePassword(login, newPassword);
+  if (!userAccount) {
+    throw new Error(`User with login '${login}' not found`);
+  }
+  return userAccount;
 }
 
 export const getUser = async (login) => {

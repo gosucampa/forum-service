@@ -1,7 +1,6 @@
 import Joi from 'joi';
 import {ADMIN, MODERATOR, USER} from "../configuration/constants.js";
 
-// TODO Add to schemas validation to user account
 const schemas = {
   createPost: Joi.object({
     title: Joi.string().required(),
