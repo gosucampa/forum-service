@@ -5,11 +5,15 @@ import mongoose from "mongoose";
 import config from "./configuration/config.js";
 import errorHandler from "./middlewares/error.middleware.js";
 import authentication from "./middlewares/authentication.middleware.js";
+import {createAdmin} from "./configuration/initAdmin.js";
+import authorizationRoutes from "./routes/authorization.routes.js";
 
 const app = express();
 
 app.use(express.json());
 app.use(authentication);
+app.use(authorizationRoutes);
+
 
 app.use('/forum', postRoutes);
 app.use('/account', userRoutes);
@@ -22,6 +26,7 @@ const connectDB = async () => {
   try {
     await mongoose.connect(config.mongodb.uri, config.mongodb.db);
     console.log('Connected to MongoDB');
+    await createAdmin();
   } catch (e) {
     console.log('Failed to connect to database', e);
   }
