@@ -1,3 +1,3 @@
-export const USER = 'user';
-export const MODERATOR = 'moderator';
-export const ADMIN = 'administrator';
+export const USER = 'USER';
+export const MODERATOR = 'ADMINISTRATOR';
+export const ADMIN = 'ADMINISTRATOR';
