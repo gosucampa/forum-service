@@ -38,10 +38,10 @@ const postSchema = new Schema({
   timestamps: true,
   toJSON: {
     transform: (doc, ret) => {
-      ret.id = ret._id;
+      ret.id = doc._id;
       delete ret._id;
-      delete ret.createAt;
-      delete ret.updateAt;
+      delete ret.createdAt;
+      delete ret.updatedAt;
       ret.dateCreated = doc.dateCreated.toISOString().slice(0, 19);
     }
   }
